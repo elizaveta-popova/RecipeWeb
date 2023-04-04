@@ -1,25 +1,27 @@
 package com.project.recipeweb.controllers;
 
-import com.project.recipeweb.services.Recipe;
-import com.project.recipeweb.services.RecipeImpl;
+import com.project.recipeweb.model.Recipe;
+import com.project.recipeweb.services.RecipeService;
+import com.project.recipeweb.services.RecipeServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/recipe")
 public class RecipeController {
-    private Recipe recipe;
+    private final RecipeService recipeService;
 
-    public RecipeController(Recipe recipe) {
-        this.recipe = recipe;
+    public RecipeController(RecipeService recipeService) {
+        this.recipeService = recipeService;
     }
 
     @GetMapping("/{id}")
-    public long recipeNumber (@PathVariable long id) {
-        return RecipeImpl.recipeId;
+    public Recipe getRecipe (@PathVariable ("id") int id) {
+        return recipeService.getRecipe(id);
     }
 
-    @GetMapping ("/add")
-    public long newAddReceipt () {
-        return RecipeImpl.recipeId;}
+    @PostMapping
+    public Recipe addRecipe (@RequestBody Recipe recipe) {
+        return recipeService.addRecipe(recipe);
+    }
 }
 
