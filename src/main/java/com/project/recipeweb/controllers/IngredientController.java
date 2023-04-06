@@ -1,14 +1,10 @@
 package com.project.recipeweb.controllers;
 
 import com.project.recipeweb.model.Ingredient;
-import com.project.recipeweb.model.Recipe;
 import com.project.recipeweb.services.IngredientService;
-import com.project.recipeweb.services.IngredientServiceImpl;
-import com.project.recipeweb.services.RecipeService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 public class IngredientController {
 
@@ -20,11 +16,25 @@ public class IngredientController {
 
     @GetMapping("/{id}")
     public Ingredient getIngredient (@PathVariable ("id") int id) {
-        return IngredientService.getIngredient(id);
+        return ingredientService.getIngredient(id);
     }
 
     @PostMapping
     public Ingredient addIngredient (@RequestBody Ingredient ingredient) {
-        return IngredientService.addIngredient(ingredient);
+        return ingredientService.addIngredient(ingredient);
+    }
+
+    @GetMapping
+    public List<Ingredient> getAllIngredients () {
+        return ingredientService.getAllIngredients();
+    }
+    @PutMapping("/{id}")
+    public Ingredient editIngredient (@PathVariable ("id") int id, @RequestBody Ingredient ingredient) {
+        return ingredientService.editIngredient(id, ingredient);
+    }
+
+    @DeleteMapping ("/{id}")
+    public Ingredient deleteIngredient (@PathVariable ("id") int id) {
+        return ingredientService.deleteIngredient (id);
     }
 }

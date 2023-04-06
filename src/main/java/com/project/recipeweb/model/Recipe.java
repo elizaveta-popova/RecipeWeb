@@ -16,4 +16,7 @@ public class Recipe {
     private List <IngredientService> ingredientServices;
     private List <String> steps;
 
+    public static Recipe from(int id, Recipe recipe) {
+        return recipe;
+    }
 }
