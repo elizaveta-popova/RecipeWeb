@@ -10,7 +10,7 @@ public class Ingredient {
     private int number;
     private String measure;
 
-    public static Ingredient from(int id, Ingredient ingredient) {
-        return ingredient;
+    public static Ingredient from(Integer key, Ingredient value) {
+        return value;
     }
 }

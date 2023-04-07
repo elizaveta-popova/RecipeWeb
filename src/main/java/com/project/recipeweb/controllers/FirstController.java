@@ -1,9 +1,11 @@
 package com.project.recipeweb.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Запуск", description = "Доказательство работы приложения.")
 public class FirstController {
     @GetMapping ("/")
     public String appWorks () {
