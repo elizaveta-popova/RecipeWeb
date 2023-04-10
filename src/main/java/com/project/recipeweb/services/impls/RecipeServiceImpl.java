@@ -7,6 +7,7 @@ import com.project.recipeweb.exception.RecipeNotFoundException;
 import com.project.recipeweb.model.Recipe;
 import com.project.recipeweb.services.FileService;
 import com.project.recipeweb.services.RecipeService;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -16,7 +17,7 @@ import java.util.*;
 public class RecipeServiceImpl implements RecipeService {
     private final static String STORE_FILES = "recipes";
     public static int recipeId = 0;
-    private final Map<Integer, Recipe> listOfRecipes;
+    private Map<Integer, Recipe> listOfRecipes;
 
     private final FileService fileService;
 
@@ -68,4 +69,15 @@ public class RecipeServiceImpl implements RecipeService {
         this.fileService.saveToFile (STORE_FILES, this.recipes);
         return Recipe.from(id, existingRecipe);
     }
+
+    public Resource getRecipesFile () {
+        return fileService.getResource(STORE_FILES);
+    }
+
+    public void importRecipes (Resource resource) {
+        fileService.saveResource(STORE_FILES, resource);
+        this.listOfRecipes = fileService.readFromFile(STORE_FILES, new TypeReference<>() {
+        });
+    }
+
 }

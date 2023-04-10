@@ -1,6 +1,7 @@
 package com.project.recipeweb.services;
 
 import com.project.recipeweb.model.Ingredient;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface IngredientService {
     Ingredient editIngredient(int id, Ingredient ingredient);
 
     Ingredient deleteIngredient(int id);
+
+    void importIngredients(Resource resource);
+
+    Resource getIngredientsFile();
 }

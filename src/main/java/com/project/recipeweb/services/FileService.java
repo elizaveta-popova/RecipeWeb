@@ -3,8 +3,11 @@ package com.project.recipeweb.services;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,6 +47,22 @@ public class FileService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Resource getResource (String filename) {
+        Path filePath = filesDir.resolve(filename + ".json");
+        return new FileSystemResource(filePath);
+    }
+
+    public void saveResource (String filename, Resource resource) {
+        Path filePath = filesDir.resolve(filename + ".json");
+
+        try {
+            Files.copy(resource.getInputStream(), filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
