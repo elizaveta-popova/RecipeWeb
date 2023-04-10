@@ -1,23 +1,49 @@
 package com.project.recipeweb.services.impls;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.recipeweb.exception.IngredientNotFoundException;
 import com.project.recipeweb.model.Ingredient;
+import com.project.recipeweb.services.FileService;
 import com.project.recipeweb.services.IngredientService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import javax.annotation.PostConstruct;
+import java.util.*;
+
 @Service
 public class IngredientServiceImpl implements IngredientService {
+    private static final String STORE_FILES = "ingredients";
+    private final FileService fileService;
     public static int ingredientId = 0;
     private final Map<Integer, Ingredient> listOfIngredients = new TreeMap<>();
+
+    private HashMap<Long, ArrayList<String>> operations;
+
+    @PostConstruct
+    private void init() {
+        try {
+            String json = fileService.readFromFile(" ./json-files/");
+            operations = new ObjectMapper().readValue(
+                    json,
+                    new TypeReference<HashMap<Long, ArrayList<String>>>() {}
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public IngredientServiceImpl(FileService fileService) {
+        this.fileService = fileService;
+    }
 
 
     @Override
     public Ingredient addIngredient(Ingredient ingredient) {
         listOfIngredients.put(ingredientId++, ingredient);
+        fileService.saveToFile (STORE_FILES, ingredients);
         return ingredient;
     }
     @Override
@@ -41,6 +67,7 @@ public class IngredientServiceImpl implements IngredientService {
             throw new IngredientNotFoundException();
         }
         ingredients.put(id, ingredient);
+        fileService.saveToFile (STORE_FILES, ingredients);
         return Ingredient.from(id, ingredient);
     }
     @Override
@@ -49,6 +76,7 @@ public class IngredientServiceImpl implements IngredientService {
         if (existingIngredient == null) {
             throw new IngredientNotFoundException();
         }
+        fileService.saveToFile (STORE_FILES, ingredients);
         return Ingredient.from(id, existingIngredient);
     }
 
