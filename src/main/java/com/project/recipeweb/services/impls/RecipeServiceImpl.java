@@ -15,28 +15,16 @@ import java.util.*;
 @Service
 public class RecipeServiceImpl implements RecipeService {
     private final static String STORE_FILES = "recipes";
-
     public static int recipeId = 0;
-    private final Map<Integer, Recipe> listOfRecipes = new TreeMap<>();
+    private final Map<Integer, Recipe> listOfRecipes;
 
     private final FileService fileService;
 
     public RecipeServiceImpl(FileService fileService) {
         this.fileService = fileService;
-    }
-    private HashMap<Long, ArrayList<String>> operations;
-
-    @PostConstruct
-    private void init() {
-        try {
-            String json = fileService.readFromFile("./json-files/");
-            operations = new ObjectMapper().readValue(
-                    json,
-                    new TypeReference<HashMap<Long, ArrayList<String>>>() {}
-            );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        Map<Integer, Recipe> storedMap = fileService.readFromFile(STORE_FILES, new TypeReference<>() {
+        });
+        this.listOfRecipes = Objects.requireNonNullElseGet(storedMap, HashMap::new);
     }
 
 

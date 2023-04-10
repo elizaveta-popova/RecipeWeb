@@ -2,7 +2,7 @@ package com.project.recipeweb.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.nio.file.Path;
 public class FileService {
     private final Path filesDir;
     private final ObjectMapper objectMapper;
-    public FileService(ObjectMapper objectMapper, @Value("${app.files.dir}") Path filesDir) {
+    public FileService(ObjectMapper objectMapper, @Value("${app.files.dir}$") Path filesDir) {
         this.objectMapper=objectMapper;
         this.filesDir=filesDir;
     }

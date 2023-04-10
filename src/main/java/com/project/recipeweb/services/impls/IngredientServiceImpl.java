@@ -5,8 +5,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.recipeweb.exception.IngredientNotFoundException;
 import com.project.recipeweb.model.Ingredient;
+import com.project.recipeweb.model.Recipe;
 import com.project.recipeweb.services.FileService;
 import com.project.recipeweb.services.IngredientService;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -17,27 +19,15 @@ public class IngredientServiceImpl implements IngredientService {
     private static final String STORE_FILES = "ingredients";
     private final FileService fileService;
     public static int ingredientId = 0;
-    private final Map<Integer, Ingredient> listOfIngredients = new TreeMap<>();
-
-    private HashMap<Long, ArrayList<String>> operations;
-
-    @PostConstruct
-    private void init() {
-        try {
-            String json = fileService.readFromFile(" ./json-files/");
-            operations = new ObjectMapper().readValue(
-                    json,
-                    new TypeReference<HashMap<Long, ArrayList<String>>>() {}
-            );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    private final Map<Integer, Ingredient> listOfIngredients;
 
     public IngredientServiceImpl(FileService fileService) {
         this.fileService = fileService;
+        Map<Integer, Ingredient> storedMap = fileService.readFromFile(STORE_FILES, new TypeReference<>() {
+        });
+        this.listOfIngredients = Objects.requireNonNullElseGet(storedMap, HashMap::new);
     }
+
 
 
     @Override
