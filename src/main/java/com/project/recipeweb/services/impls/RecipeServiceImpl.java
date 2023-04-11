@@ -1,16 +1,17 @@
 package com.project.recipeweb.services.impls;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.recipeweb.exception.RecipeNotFoundException;
 import com.project.recipeweb.model.Recipe;
 import com.project.recipeweb.services.FileService;
 import com.project.recipeweb.services.RecipeService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 @Service
@@ -78,6 +79,22 @@ public class RecipeServiceImpl implements RecipeService {
         fileService.saveResource(STORE_FILES, resource);
         this.listOfRecipes = fileService.readFromFile(STORE_FILES, new TypeReference<>() {
         });
+    }
+
+    public File saveRecipesTxt() {
+        File file = fileService.addTempFile("recipesReadable");
+        for(Recipe recipe : listOfRecipes.values()){
+            try(Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)){
+                writer.append("Название блюда: " + recipe.getTitle()
+                        + "\nВремя приготовления: " + recipe.getCookingTime()
+                        + " минут" + "\nИнгредиенты " + recipe.getIngredient()
+                        + "\nШаги: " + recipe.getSteps());
+                writer.append("\n");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return file;
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import javax.swing.filechooser.FileSystemView;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -65,4 +66,7 @@ public class FileService {
 
     }
 
+    public File addTempFile(String suffix) {
+        return null;
+    }
 }

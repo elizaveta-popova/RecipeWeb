@@ -4,6 +4,7 @@ import com.project.recipeweb.model.Recipe;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,4 +25,6 @@ public interface RecipeService {
     Resource getRecipesFile();
 
     void importRecipes(Resource resource);
+
+    File saveRecipesTxt();
 }
