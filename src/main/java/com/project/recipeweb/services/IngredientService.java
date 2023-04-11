@@ -9,8 +9,7 @@ import java.util.Map;
 import java.util.TreeMap;
 @Service
 public interface IngredientService {
-    int idCounter = 0;
-    Map<Integer, Ingredient> ingredients = new TreeMap<>();
+    Map<Integer, Ingredient> listOfIngredients = new TreeMap<>();
 
     Ingredient addIngredient(Ingredient ingredient);
 

@@ -33,7 +33,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe addRecipe(Recipe recipe) {
         listOfRecipes.put(recipeId++, recipe);
-        this.fileService.saveToFile (STORE_FILES, this.recipes);
+        this.fileService.saveToFile (STORE_FILES, this.listOfRecipes);
         return recipe;
     }
     @Override
@@ -44,7 +44,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List <Recipe> getAllRecipes() {
         List<Recipe> list = new ArrayList<>();
-        for (Map.Entry<Integer, Recipe> entry: recipes.entrySet()) {
+        for (Map.Entry<Integer, Recipe> entry: listOfRecipes.entrySet()) {
             list.add(Recipe.from(entry.getKey(), entry.getValue()));
         }
         return list;
@@ -52,22 +52,22 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe editRecipe(int id, Recipe recipe)  {
-        Recipe existingRecipe = recipes.get(id);
+        Recipe existingRecipe = listOfRecipes.get(id);
         if (existingRecipe == null) {
             throw new RecipeNotFoundException();
         }
-        recipes.put(id, recipe);
-        this.fileService.saveToFile (STORE_FILES, this.recipes);
+        listOfRecipes.put(id, recipe);
+        this.fileService.saveToFile (STORE_FILES, this.listOfRecipes);
         return Recipe.from(id, recipe);
     }
 
     @Override
     public Recipe deleteRecipe(int id) {
-        Recipe existingRecipe = recipes.remove(id);
+        Recipe existingRecipe = listOfRecipes.remove(id);
         if (existingRecipe == null) {
             throw new RecipeNotFoundException();
         }
-        this.fileService.saveToFile (STORE_FILES, this.recipes);
+        this.fileService.saveToFile (STORE_FILES, this.listOfRecipes);
         return Recipe.from(id, existingRecipe);
     }
 
@@ -87,7 +87,7 @@ public class RecipeServiceImpl implements RecipeService {
             try(Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)){
                 writer.append("Название блюда: " + recipe.getTitle()
                         + "\nВремя приготовления: " + recipe.getCookingTime()
-                        + " минут" + "\nИнгредиенты " + recipe.getIngredient()
+                        + " минут"
                         + "\nШаги: " + recipe.getSteps());
                 writer.append("\n");
             } catch (IOException e) {

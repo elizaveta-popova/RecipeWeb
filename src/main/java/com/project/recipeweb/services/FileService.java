@@ -17,7 +17,7 @@ import java.nio.file.Path;
 public class FileService {
     private final Path filesDir;
     private final ObjectMapper objectMapper;
-    public FileService(ObjectMapper objectMapper, @Value("${app.files.dir}$") Path filesDir) {
+    public FileService(ObjectMapper objectMapper, @Value("${src/main/resources}") Path filesDir) {
         this.objectMapper=objectMapper;
         this.filesDir=filesDir;
     }
@@ -26,7 +26,7 @@ public class FileService {
         try{
             String json = objectMapper.writeValueAsString(objectToSave);
             Files.createDirectories(filesDir);
-            Path filePath = filesDir.resolve(fileName + "./json");
+            Path filePath = filesDir.resolve(fileName + ".json");
             Files.deleteIfExists(filePath);
             Files.createFile(filePath);
             Files.writeString(filePath, json);

@@ -10,8 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 @Service
 public interface RecipeService {
-    int idCounter = 0;
-    Map<Integer, Recipe> recipes = new TreeMap<>();
+    Map<Integer, Recipe> listOfRecipes = new TreeMap<>();
 
     Recipe addRecipe(Recipe recipe);
     Recipe getRecipe(int id);

@@ -29,7 +29,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public Ingredient addIngredient(Ingredient ingredient) {
         listOfIngredients.put(ingredientId++, ingredient);
-        fileService.saveToFile (STORE_FILES, ingredients);
+        fileService.saveToFile (STORE_FILES, listOfIngredients);
         return ingredient;
     }
     @Override
@@ -40,7 +40,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public List<Ingredient> getAllIngredients() {
         List<Ingredient> list = new ArrayList<>();
-        for (Map.Entry<Integer, Ingredient> entry: ingredients.entrySet()) {
+        for (Map.Entry<Integer, Ingredient> entry: listOfIngredients.entrySet()) {
             list.add(Ingredient.from(entry.getKey(), entry.getValue()));
         }
         return list;
@@ -48,21 +48,21 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient editIngredient(int id, Ingredient ingredient)  {
-        Ingredient existingIngredient = ingredients.get(id);
+        Ingredient existingIngredient = listOfIngredients.get(id);
         if (existingIngredient == null) {
             throw new IngredientNotFoundException();
         }
-        ingredients.put(id, ingredient);
-        fileService.saveToFile (STORE_FILES, ingredients);
+        listOfIngredients.put(id, ingredient);
+        fileService.saveToFile (STORE_FILES, listOfIngredients);
         return Ingredient.from(id, ingredient);
     }
     @Override
     public Ingredient deleteIngredient(int id) {
-        Ingredient existingIngredient = ingredients.remove(id);
+        Ingredient existingIngredient = listOfIngredients.remove(id);
         if (existingIngredient == null) {
             throw new IngredientNotFoundException();
         }
-        fileService.saveToFile (STORE_FILES, ingredients);
+        fileService.saveToFile (STORE_FILES, listOfIngredients);
         return Ingredient.from(id, existingIngredient);
     }
 

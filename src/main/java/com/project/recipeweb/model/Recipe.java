@@ -13,9 +13,8 @@ public class Recipe {
     private int id;
     private String title;
     private int cookingTime;
-    private List <IngredientService> ingredientServices;
+    private List <Ingredient> ingredients;
     private List <String> steps;
-    private Ingredient ingredient;
 
     public static Recipe from(int id, Recipe recipe) {
         return recipe;
