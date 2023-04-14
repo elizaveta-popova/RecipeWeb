@@ -85,24 +85,6 @@ public class RecipeServiceImpl implements RecipeService {
         this.listOfRecipes = fileService.readFromFile(STORE_FILES, new TypeReference<>() {
         });
     }
-
-//    public void saveRecipesTxt (PrintWriter writer) {
-//        for(Recipe recipe : this.listOfRecipes.values()){
-//            writer.println(recipe.getTitle());
-//            writer.println("Время приготовления: ".formatted(recipe.getCookingTime()));
-//            writer.println("Ингредиенты: ");
-//            for (Ingredient ingredient : recipe.getIngredients()) {
-//                writer.println("\t%s - %d %s".formatted(ingredient.getTitle(), ingredient.getNumber(), ingredient.getMeasure()));
-//            }
-//            writer.println("Инструкция приготовления:");
-//            for (int i = 0; i < recipe.getSteps().size(); i++) {
-//                writer.println("%d. %s".formatted(i+1, recipe.getSteps().get(i)));
-//            }
-//        }
-//        writer.flush();
-//    }
-//
-
     public File saveRecipesTxt() {
         File file = fileService.addTempFile().toFile();
         for(Recipe recipe : listOfRecipes.values()){
