@@ -2,13 +2,16 @@ package com.project.recipeweb.services.impls;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.project.recipeweb.exception.RecipeNotFoundException;
+import com.project.recipeweb.model.Ingredient;
 import com.project.recipeweb.model.Recipe;
 import com.project.recipeweb.services.FileService;
 import com.project.recipeweb.services.RecipeService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -21,9 +24,11 @@ public class RecipeServiceImpl implements RecipeService {
     private Map<Integer, Recipe> listOfRecipes;
 
     private final FileService fileService;
+    private final Ingredient ingredient;
 
-    public RecipeServiceImpl(FileService fileService) {
+    public RecipeServiceImpl(FileService fileService, Ingredient ingredient) {
         this.fileService = fileService;
+        this.ingredient = ingredient;
         Map<Integer, Recipe> storedMap = fileService.readFromFile(STORE_FILES, new TypeReference<>() {
         });
         this.listOfRecipes = Objects.requireNonNullElseGet(storedMap, HashMap::new);
@@ -81,14 +86,28 @@ public class RecipeServiceImpl implements RecipeService {
         });
     }
 
+//    public void saveRecipesTxt (PrintWriter writer) {
+//        for(Recipe recipe : this.listOfRecipes.values()){
+//            writer.println(recipe.getTitle());
+//            writer.println("Время приготовления: ".formatted(recipe.getCookingTime()));
+//            writer.println("Ингредиенты: ");
+//            for (Ingredient ingredient : recipe.getIngredients()) {
+//                writer.println("\t%s - %d %s".formatted(ingredient.getTitle(), ingredient.getNumber(), ingredient.getMeasure()));
+//            }
+//            writer.println("Инструкция приготовления:");
+//            for (int i = 0; i < recipe.getSteps().size(); i++) {
+//                writer.println("%d. %s".formatted(i+1, recipe.getSteps().get(i)));
+//            }
+//        }
+//        writer.flush();
+//    }
+//
+
     public File saveRecipesTxt() {
-        File file = fileService.addTempFile("recipesReadable");
+        File file = fileService.addTempFile().toFile();
         for(Recipe recipe : listOfRecipes.values()){
             try(Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)){
-                writer.append("Название блюда: " + recipe.getTitle()
-                        + "\nВремя приготовления: " + recipe.getCookingTime()
-                        + " минут"
-                        + "\nШаги: " + recipe.getSteps());
+                writer.append("Название блюда: ").append(recipe.getTitle()).append("\nВремя приготовления: ").append(String.valueOf(recipe.getCookingTime())).append(" минут").append("\nШаги: ").append(String.valueOf(recipe.getSteps()));
                 writer.append("\n");
             } catch (IOException e) {
                 throw new RuntimeException(e);

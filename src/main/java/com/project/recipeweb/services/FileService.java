@@ -65,8 +65,13 @@ public class FileService {
         }
 
     }
+    public Path addTempFile() {
+        try {
+            return Files.createTempFile("tempFile", "allRecipes");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-    public File addTempFile(String suffix) {
-        return null;
     }
+
 }

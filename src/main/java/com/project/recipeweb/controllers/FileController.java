@@ -84,7 +84,7 @@ public class FileController {
                     description = "Неверный запрос."
             )
     })
-    public ResponseEntity<InputStreamResource> downloadRecipeTxtFile() {
+    public ResponseEntity<InputStreamResource> saveRecipesTxt() {
         try {
             File file = recipeService.saveRecipesTxt();
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
